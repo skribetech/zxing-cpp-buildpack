@@ -27,12 +27,17 @@ EOF
 
 - Library: `.zxing-cpp/lib/libZXing.so`
 - Headers: `.zxing-cpp/include/ZXing/`
+- pkg-config file: `.zxing-cpp/lib/pkgconfig/zxing.pc`
 
 Environment variables are automatically configured:
-- `ZXING_CPP_HOME=$HOME/.zxing-cpp`
+- `ZXING_CPP_HOME=$HOME/.zxing-cpp` (runtime only)
 - `LD_LIBRARY_PATH` includes the lib directory
-- `PKG_CONFIG_PATH` includes pkg-config files
+- `PKG_CONFIG_PATH` includes pkg-config files (build-time and runtime)
 - `CMAKE_PREFIX_PATH` includes the installation directory
+- `CPATH` includes the include directory (build-time only)
+- `LIBRARY_PATH` includes the lib directory (build-time only)
+
+The build-time environment variables are exported to subsequent buildpacks, so native extensions and gems can find the zxing library during compilation.
 
 ## Testing
 

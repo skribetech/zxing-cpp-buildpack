@@ -98,4 +98,14 @@ export PKG_CONFIG_PATH=\$ZXING_CPP_HOME/lib/pkgconfig:\$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=\$ZXING_CPP_HOME:\$CMAKE_PREFIX_PATH
 EOF
 
+# Export environment variables for subsequent buildpacks
+echo "-----> Exporting build-time environment variables"
+if [ -d "$ENV_DIR" ]; then
+  echo "$INSTALL_DIR/lib/pkgconfig" > "$ENV_DIR/PKG_CONFIG_PATH"
+  echo "$INSTALL_DIR/lib" > "$ENV_DIR/LD_LIBRARY_PATH"
+  echo "$INSTALL_DIR" > "$ENV_DIR/CMAKE_PREFIX_PATH"
+  echo "$INSTALL_DIR/include" > "$ENV_DIR/CPATH"
+  echo "$INSTALL_DIR/lib" > "$ENV_DIR/LIBRARY_PATH"
+fi
+
 echo "-----> zxing-cpp $ZXING_VERSION installed successfully"
