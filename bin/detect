@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# bin/detect <build-dir>
+#
+# This buildpack is designed to be used explicitly, so we always exit 0
+# to indicate that this buildpack can be used.
+
+echo "zxing-cpp"
+exit 0
