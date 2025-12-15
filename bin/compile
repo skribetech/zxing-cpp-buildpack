@@ -9,7 +9,8 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 ZXING_VERSION="2.3.0"
-ZXING_DIR="$CACHE_DIR/zxing-cpp-$ZXING_VERSION"
+ZXING_COMMIT="d6068bcebeb8fd9f0d35a99b00d202be86a14dbe"
+ZXING_DIR="$CACHE_DIR/zxing-cpp-$ZXING_COMMIT"
 INSTALL_DIR="$BUILD_DIR/.zxing-cpp"
 
 echo "-----> Installing zxing-cpp $ZXING_VERSION"
@@ -28,12 +29,22 @@ fi
 if [ -d "$ZXING_DIR" ]; then
   echo "-----> Using cached zxing-cpp source"
 else
-  echo "-----> Downloading zxing-cpp $ZXING_VERSION"
+  echo "-----> Downloading zxing-cpp $ZXING_VERSION (commit $ZXING_COMMIT)"
   mkdir -p "$CACHE_DIR"
   cd "$CACHE_DIR"
 
   # Download specific version
-  git clone --depth 1 --branch v$ZXING_VERSION https://github.com/zxing-cpp/zxing-cpp.git "zxing-cpp-$ZXING_VERSION"
+  git clone --depth 1 --branch v$ZXING_VERSION https://github.com/zxing-cpp/zxing-cpp.git "zxing-cpp-$ZXING_COMMIT"
+
+  # Verify we got the expected commit
+  cd "zxing-cpp-$ZXING_COMMIT"
+  ACTUAL_COMMIT=$(git rev-parse HEAD)
+  if [ "$ACTUAL_COMMIT" != "$ZXING_COMMIT" ]; then
+    echo "ERROR: Expected commit $ZXING_COMMIT but got $ACTUAL_COMMIT"
+    echo "The v$ZXING_VERSION tag may have been moved. Buildpack needs to be updated."
+    exit 1
+  fi
+  cd "$CACHE_DIR"
 fi
 
 # Build zxing-cpp
