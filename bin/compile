@@ -15,15 +15,30 @@ INSTALL_DIR="$BUILD_DIR/.zxing-cpp"
 
 echo "-----> Installing zxing-cpp $ZXING_VERSION"
 
-# Install build dependencies only if needed
-if ! command -v cmake >/dev/null 2>&1 || ! command -v g++ >/dev/null 2>&1 || ! command -v git >/dev/null 2>&1; then
-  echo "-----> Installing build dependencies"
-  export DEBIAN_FRONTEND=noninteractive
-  apt-get update -qq 2>&1
-  apt-get install -y -qq cmake g++ git 2>&1
-else
-  echo "-----> Build dependencies already present"
+# Verify required build dependencies are available
+echo "-----> Checking build dependencies"
+MISSING_DEPS=""
+
+if ! command -v cmake >/dev/null 2>&1; then
+  MISSING_DEPS="$MISSING_DEPS cmake"
 fi
+
+if ! command -v g++ >/dev/null 2>&1; then
+  MISSING_DEPS="$MISSING_DEPS g++"
+fi
+
+if ! command -v git >/dev/null 2>&1; then
+  MISSING_DEPS="$MISSING_DEPS git"
+fi
+
+if [ -n "$MISSING_DEPS" ]; then
+  echo "ERROR: Missing required build dependencies:$MISSING_DEPS"
+  echo "These tools should be provided by your build environment/stack."
+  echo "Please ensure you're using a stack that includes build-essential tools."
+  exit 1
+fi
+
+echo "-----> Build dependencies present: cmake, g++, git"
 
 # Check if we have a cached build
 if [ -d "$ZXING_DIR" ]; then
