@@ -1,6 +1,7 @@
 # ZXing-C++ Buildpack for Scalingo
 
 Installs [zxing-cpp](https://github.com/zxing-cpp/zxing-cpp) v2.3.0 on Scalingo applications.
+Note: this install only the reader, not the writer.
 
 Supports `scalingo-22` and `scalingo-24` stacks.
 
