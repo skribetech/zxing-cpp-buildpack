@@ -6,10 +6,21 @@ Supports `scalingo-22` and `scalingo-24` stacks.
 
 ## Usage
 
-Tell Scalingo to use the buildpack:
+This buildpack requires cmake to compile zxing-cpp. Use Scalingo's APT buildpack to install it.
+
+1. Create an `Aptfile` with the required dependency:
 
 ```bash
-$ echo "https://github.com/skribetech/zxing-cpp-buildpack.git" > .buildpacks
+$ echo "cmake" > Aptfile
+```
+
+2. Configure your buildpacks (APT buildpack must run first):
+
+```bash
+$ cat > .buildpacks << EOF
+https://github.com/Scalingo/apt-buildpack.git
+https://github.com/skribetech/zxing-cpp-buildpack.git
+EOF
 ```
 
 ## What's Installed
